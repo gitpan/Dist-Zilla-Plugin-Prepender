@@ -8,7 +8,11 @@ meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Dist-Zilla-Plugin-Prepender
-requires: {}
+requires:
+  Dist::Zilla: 0
+  File::Find::Rule: 0
+  Moose: 0
+  Test::More: 0
 resources:
   homepage: http://search.cpan.org/dist/Dist-Zilla-Plugin-Prepender/
-version: 0.1.0
+version: 0.1.1

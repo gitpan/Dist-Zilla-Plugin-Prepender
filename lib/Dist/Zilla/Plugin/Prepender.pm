@@ -11,7 +11,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Prepender;
-our $VERSION = '0.1.0';
+our $VERSION = '0.1.1';
 
 # ABSTRACT: prepend lines at the top of your perl files
 
@@ -78,7 +78,7 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 0.1.0
+version 0.1.1
 
 =begin Pod::Coverage
 
