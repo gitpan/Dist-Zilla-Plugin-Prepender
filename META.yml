@@ -1,0 +1,14 @@
+---
+abstract: 'prepend lines at the top of your perl files'
+author:
+  - 'Jerome Quelin'
+generated_by: 'Dist::Zilla::Plugin::MetaYAML version 1.091610'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Dist-Zilla-Plugin-Prepender
+requires: {}
+resources:
+  homepage: http://search.cpan.org/dist/Dist-Zilla-Plugin-Prepender/
+version: 0.1.0
