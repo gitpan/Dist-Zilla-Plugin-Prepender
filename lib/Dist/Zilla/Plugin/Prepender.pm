@@ -11,7 +11,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Prepender;
-our $VERSION = '0.1.1';
+our $VERSION = '0.1.2';
 
 # ABSTRACT: prepend lines at the top of your perl files
 
@@ -78,7 +78,7 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 0.1.1
+version 0.1.2
 
 =begin Pod::Coverage
 
@@ -93,6 +93,7 @@ In your F<dist.ini>:
 
     [Prepender]
     line = # This file is part of Foo::Bar
+    line = # Foo::Bar is copyright...
     line = use strict;
     line = use warnings;
 
@@ -105,6 +106,7 @@ lines will be inserted just after it.
 This is useful to enforce a set of pragmas to your files (since pragmas
 are lexical, they will be active for the whole file), or to add some
 copyright comments, as the fsf recommends.
+
 =head1 AUTHOR
 
   Jerome Quelin
@@ -121,4 +123,3 @@ the same terms as the Perl 5 programming language system itself.
 
 
 __END__
-
