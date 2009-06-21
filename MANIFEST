@@ -7,3 +7,7 @@ README
 dist.ini
 lib/Dist/Zilla/Plugin/Prepender.pm
 t/00-compile.t
+t/1-prepender.t
+t/foo/bin/foobar
+t/foo/dist.ini
+t/foo/lib/Foo.pm

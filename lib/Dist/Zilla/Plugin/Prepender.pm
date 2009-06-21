@@ -1,19 +1,18 @@
-#
-# This file is part of Dist::Zilla::Plugin::Prepender
-#
-# Dist::Zilla::Plugin::Prepender is copyright (c) 2009 by Jerome Quelin.
-#
+# 
+# This file is part of Dist-Zilla-Plugin-Prepender
+# 
+# This software is copyright (c) 2009 by Jerome Quelin.
+# 
 # This is free software; you can redistribute it and/or modify it under
 # the same terms as the Perl 5 programming language system itself.
-#
+# 
+package Dist::Zilla::Plugin::Prepender;
+our $VERSION = '0.2.0';
+
+# ABSTRACT: prepend lines at the top of your perl files
 
 use strict;
 use warnings;
-
-package Dist::Zilla::Plugin::Prepender;
-our $VERSION = '0.1.2';
-
-# ABSTRACT: prepend lines at the top of your perl files
 
 use Moose;
 with 'Dist::Zilla::Role::FileMunger';
@@ -24,13 +23,17 @@ with 'Dist::Zilla::Role::FileMunger';
 # accept some arguments multiple times.
 sub multivalue_args { qw{ line } }
 
+has copyright => (
+    is => 'ro',
+    default => 0,
+);
 has _lines => (
-  is         => 'ro',
-  isa        => 'ArrayRef',
-  lazy       => 1,
-  auto_deref => 1,
-  init_arg   => 'line',
-  default    => sub { [] },
+    is         => 'ro',
+    isa        => 'ArrayRef',
+    lazy       => 1,
+    auto_deref => 1,
+    init_arg   => 'line',
+    default    => sub { [] },
 );
 
 
@@ -53,13 +56,27 @@ sub munge_file {
 #
 sub _munge_perl {
     my ($self, $file) = @_;
-    my $stuff = join "\n", $self->_lines;
+    my @prepend;
     my @lines = split /\n/, $file->content;
 
-    # if there's a shebang line, insert stuff just after it
-    my $id = ( $lines[0] =~ /^#!(?:.*)perl(?:$|\s)/ ) ? 1 : 0;
+    # add copyright information if requested
+    if ( $self->copyright ) {
+        my @copyright = (
+            '',
+            "This file is part of " . $self->zilla->name,
+            '',
+            split(/\n/, $self->zilla->license->notice),
+            '',
+        );
+        push @prepend, map { "# $_" } @copyright;
+    }
 
-    splice @lines, $id, 0, $stuff;
+    # add hand-written lines to prepend
+    push @prepend, $self->_lines;
+
+    # insertion point depends if there's a shebang line
+    my $id = ( $lines[0] =~ /^#!(?:.*)perl(?:$|\s)/ ) ? 1 : 0;
+    splice @lines, $id, 0, @prepend;
     $file->content(join "\n", @lines);
 }
 
@@ -78,7 +95,7 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 0.1.2
+version 0.2.0
 
 =begin Pod::Coverage
 
@@ -92,8 +109,7 @@ munge_file
 In your F<dist.ini>:
 
     [Prepender]
-    line = # This file is part of Foo::Bar
-    line = # Foo::Bar is copyright...
+    copyright = 1
     line = use strict;
     line = use warnings;
 
@@ -106,6 +122,24 @@ lines will be inserted just after it.
 This is useful to enforce a set of pragmas to your files (since pragmas
 are lexical, they will be active for the whole file), or to add some
 copyright comments, as the fsf recommends.
+
+The module accepts the following options in its F<dist.ini> section:
+
+=over 4
+
+=item * copyright - whether to insert a boilerplate copyright comment.
+defaults to false.
+
+=item * line - anything you want to add. may be specified multiple
+times. no default.
+
+=back 
+
+=head1 BUGS
+
+Please report any bugs or feature request to
+C<< <bug-dist-zilla-plugin-prepender@rt.cpan.org> >>, or through the web interface
+at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dist-Zilla-Plugin-Prepender>.
 
 =head1 AUTHOR
 
