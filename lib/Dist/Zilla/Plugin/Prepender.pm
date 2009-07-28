@@ -7,7 +7,7 @@
 # the same terms as the Perl 5 programming language system itself.
 # 
 package Dist::Zilla::Plugin::Prepender;
-our $VERSION = '0.2.0';
+our $VERSION = '0.2.1';
 
 # ABSTRACT: prepend lines at the top of your perl files
 
@@ -21,7 +21,7 @@ with 'Dist::Zilla::Role::FileMunger';
 # -- attributes
 
 # accept some arguments multiple times.
-sub multivalue_args { qw{ line } }
+sub mvp_multivalue_args { qw{ line } }
 
 has copyright => (
     is => 'ro',
@@ -95,7 +95,7 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 0.2.0
+version 0.2.1
 
 =begin Pod::Coverage
 

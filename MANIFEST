@@ -11,3 +11,5 @@ t/1-prepender.t
 t/foo/bin/foobar
 t/foo/dist.ini
 t/foo/lib/Foo.pm
+t/release-pod-coverage.t
+t/release-pod-syntax.t
