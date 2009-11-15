@@ -6,15 +6,20 @@
 # This is free software; you can redistribute it and/or modify it under
 # the same terms as the Perl 5 programming language system itself.
 # 
-package Dist::Zilla::Plugin::Prepender;
-our $VERSION = '0.2.1';
-
-# ABSTRACT: prepend lines at the top of your perl files
-
+use 5.008;
 use strict;
 use warnings;
 
+package Dist::Zilla::Plugin::Prepender;
+our $VERSION = '1.093190';
+
+
+# ABSTRACT: prepend lines at the top of your perl files
+
 use Moose;
+use MooseX::Has::Sugar;
+use MooseX::Types::Moose qw{ ArrayRef };
+
 with 'Dist::Zilla::Role::FileMunger';
 
 
@@ -23,15 +28,10 @@ with 'Dist::Zilla::Role::FileMunger';
 # accept some arguments multiple times.
 sub mvp_multivalue_args { qw{ line } }
 
-has copyright => (
-    is => 'ro',
-    default => 0,
-);
+has copyright => ( ro, default => 0 );
 has _lines => (
-    is         => 'ro',
-    isa        => 'ArrayRef',
-    lazy       => 1,
-    auto_deref => 1,
+    ro, lazy, auto_deref,
+    isa        => ArrayRef,
     init_arg   => 'line',
     default    => sub { [] },
 );
@@ -86,7 +86,6 @@ no Moose;
 
 
 
-
 =pod
 
 =head1 NAME
@@ -95,14 +94,7 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 0.2.1
-
-=begin Pod::Coverage
-
-multivalue_args
-munge_file
-
-=end Pod::Coverage
+version 1.093190
 
 =head1 SYNOPSIS
 
@@ -133,13 +125,47 @@ defaults to false.
 =item * line - anything you want to add. may be specified multiple
 times. no default.
 
-=back 
+=back
 
-=head1 BUGS
+=begin Pod::Coverage
 
-Please report any bugs or feature request to
-C<< <bug-dist-zilla-plugin-prepender@rt.cpan.org> >>, or through the web interface
-at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dist-Zilla-Plugin-Prepender>.
+multivalue_args
+munge_file
+
+
+=end Pod::Coverage
+
+=head1 SEE ALSO
+
+You can look for information on this module at:
+
+=over 4
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/Dist-Zilla-Plugin-Prepender>
+
+=item * See open / report bugs
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-Zilla-Plugin-Prepender>
+
+=item * Mailing-list (same as L<Dist::Zilla>)
+
+L<http://www.listbox.com/subscribe/?list_id=139292>
+
+=item * Git repository
+
+L<http://github.com/jquelin/dist-zilla-plugin-prepender.git>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/Dist-Zilla-Plugin-Prepender>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/Dist-Zilla-Plugin-Prepender>
+
+=back
 
 =head1 AUTHOR
 
@@ -152,8 +178,7 @@ This software is copyright (c) 2009 by Jerome Quelin.
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
-=cut 
-
+=cut
 
 
 __END__
