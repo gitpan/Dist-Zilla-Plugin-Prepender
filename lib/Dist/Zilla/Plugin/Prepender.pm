@@ -11,9 +11,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Prepender;
-our $VERSION = '1.093190';
-
-
+our $VERSION = '1.100130';
 # ABSTRACT: prepend lines at the top of your perl files
 
 use Moose;
@@ -28,7 +26,7 @@ with 'Dist::Zilla::Role::FileMunger';
 # accept some arguments multiple times.
 sub mvp_multivalue_args { qw{ line } }
 
-has copyright => ( ro, default => 0 );
+has copyright => ( ro, default => 1 );
 has _lines => (
     ro, lazy, auto_deref,
     isa        => ArrayRef,
@@ -57,7 +55,6 @@ sub munge_file {
 sub _munge_perl {
     my ($self, $file) = @_;
     my @prepend;
-    my @lines = split /\n/, $file->content;
 
     # add copyright information if requested
     if ( $self->copyright ) {
@@ -73,11 +70,16 @@ sub _munge_perl {
 
     # add hand-written lines to prepend
     push @prepend, $self->_lines;
+    my $prepend = join "\n", @prepend;
 
     # insertion point depends if there's a shebang line
-    my $id = ( $lines[0] =~ /^#!(?:.*)perl(?:$|\s)/ ) ? 1 : 0;
-    splice @lines, $id, 0, @prepend;
-    $file->content(join "\n", @lines);
+    my $content = $file->content;
+    if ( $content =~ /^#!(?:.*)perl(?:$|\s)/ ) {
+        $content =~ s/\n/\n$prepend\n/;
+    } else {
+        $content =~ s/^/$prepend\n/;
+    }
+    $file->content($content);
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -94,14 +96,14 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 1.093190
+version 1.100130
 
 =head1 SYNOPSIS
 
 In your F<dist.ini>:
 
     [Prepender]
-    copyright = 1
+    copyright = 0
     line = use strict;
     line = use warnings;
 
@@ -120,20 +122,15 @@ The module accepts the following options in its F<dist.ini> section:
 =over 4
 
 =item * copyright - whether to insert a boilerplate copyright comment.
-defaults to false.
+defaults to true.
 
 =item * line - anything you want to add. may be specified multiple
 times. no default.
 
 =back
 
-=begin Pod::Coverage
-
-multivalue_args
+=for Pod::Coverage multivalue_args
 munge_file
-
-
-=end Pod::Coverage
 
 =head1 SEE ALSO
 
@@ -155,7 +152,7 @@ L<http://www.listbox.com/subscribe/?list_id=139292>
 
 =item * Git repository
 
-L<http://github.com/jquelin/dist-zilla-plugin-prepender.git>
+L<http://github.com/jquelin/dist-zilla-plugin-prepender>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -182,3 +179,4 @@ the same terms as the Perl 5 programming language system itself.
 
 
 __END__
+

@@ -3,16 +3,15 @@ Changes
 LICENSE
 MANIFEST
 META.yml
-Makefile.PL
 README
 dist.ini
 lib/Dist/Zilla/Plugin/Prepender.pm
 t/00-compile.t
-t/1-prepender.t
 t/author-critic.t
 t/foo/bin/foobar
 t/foo/dist.ini
 t/foo/lib/Foo.pm
+t/prepender.t
 t/release-meta-yaml.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
