@@ -7,7 +7,6 @@
 # the same terms as the Perl 5 programming language system itself.
 # 
 package Foo;
-our $VERSION = '1.100130';
 # ABSTRACT: Foo
 1;
 __END__

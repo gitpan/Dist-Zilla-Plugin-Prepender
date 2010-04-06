@@ -12,6 +12,6 @@ t/foo/bin/foobar
 t/foo/dist.ini
 t/foo/lib/Foo.pm
 t/prepender.t
-t/release-meta-yaml.t
+t/release-distmeta.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t

@@ -11,12 +11,11 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Prepender;
-our $VERSION = '1.100130';
+$Dist::Zilla::Plugin::Prepender::VERSION = '1.100960';
 # ABSTRACT: prepend lines at the top of your perl files
 
 use Moose;
 use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw{ ArrayRef };
 
 with 'Dist::Zilla::Role::FileMunger';
 
@@ -29,7 +28,7 @@ sub mvp_multivalue_args { qw{ line } }
 has copyright => ( ro, default => 1 );
 has _lines => (
     ro, lazy, auto_deref,
-    isa        => ArrayRef,
+    isa        => 'ArrayRef[Str]',
     init_arg   => 'line',
     default    => sub { [] },
 );
@@ -96,7 +95,7 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 1.100130
+version 1.100960
 
 =head1 SYNOPSIS
 
