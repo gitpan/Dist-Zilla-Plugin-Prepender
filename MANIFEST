@@ -7,11 +7,17 @@ README
 dist.ini
 lib/Dist/Zilla/Plugin/Prepender.pm
 t/00-compile.t
+t/000-report-versions.t
 t/author-critic.t
 t/foo/bin/foobar
 t/foo/dist.ini
 t/foo/lib/Foo.pm
 t/prepender.t
 t/release-distmeta.t
+t/release-has-version.t
+t/release-kwalitee.t
+t/release-minimum-version.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
+t/release-portability.t
+t/release-unused-vars.t

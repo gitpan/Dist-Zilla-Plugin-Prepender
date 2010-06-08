@@ -11,7 +11,9 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Prepender;
-$Dist::Zilla::Plugin::Prepender::VERSION = '1.100960';
+BEGIN {
+  $Dist::Zilla::Plugin::Prepender::VERSION = '1.101590';
+}
 # ABSTRACT: prepend lines at the top of your perl files
 
 use Moose;
@@ -64,7 +66,7 @@ sub _munge_perl {
             split(/\n/, $self->zilla->license->notice),
             '',
         );
-        push @prepend, map { "# $_" } @copyright;
+        push @prepend, map { length($_) ? "# $_" : '#' } @copyright;
     }
 
     # add hand-written lines to prepend
@@ -95,7 +97,7 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 1.100960
+version 1.101590
 
 =head1 SYNOPSIS
 

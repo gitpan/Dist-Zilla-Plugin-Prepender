@@ -9,12 +9,14 @@ my %module_build_args = (
                        'script_files' => [],
                        'license' => 'perl',
                        'build_requires' => {
-                                             'Test::More' => '0',
+                                             'Scalar::Util' => '0',
                                              'English' => '0',
+                                             'Dist::Zilla::Tester' => '0',
+                                             'Carp' => '0',
+                                             'Test::More' => '0.88',
                                              'File::Find' => '0',
                                              'File::Temp' => '0',
                                              'Path::Class' => '0',
-                                             'Dist::Zilla::Tester' => '0',
                                              'Module::Build' => '0.3601'
                                            },
                        'dist_name' => 'Dist-Zilla-Plugin-Prepender',
@@ -28,10 +30,11 @@ my %module_build_args = (
                                        'Dist::Zilla::Role::FileMunger' => '0',
                                        'Moose' => '0'
                                      },
+                       'recommends' => {},
                        'configure_requires' => {
                                                  'Module::Build' => '0.3601'
                                                },
-                       'dist_version' => '1.100960'
+                       'dist_version' => '1.101590'
                      );
 
 
