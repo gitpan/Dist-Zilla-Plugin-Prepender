@@ -1,18 +1,18 @@
-# 
+#
 # This file is part of Dist-Zilla-Plugin-Prepender
-# 
+#
 # This software is copyright (c) 2009 by Jerome Quelin.
-# 
+#
 # This is free software; you can redistribute it and/or modify it under
 # the same terms as the Perl 5 programming language system itself.
-# 
+#
 use 5.008;
 use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Prepender;
 BEGIN {
-  $Dist::Zilla::Plugin::Prepender::VERSION = '1.101590';
+  $Dist::Zilla::Plugin::Prepender::VERSION = '1.103470';
 }
 # ABSTRACT: prepend lines at the top of your perl files
 
@@ -53,6 +53,13 @@ sub munge_file {
 #
 # munge content of perl $file: add stuff at the top of the file
 #
+
+my %re = (
+  shebang   => qr/^#!(?:.*)perl(?:$|\s.*$)/m,
+  vimmode   => qr/^#\s*(?:vim?|ex):.*$/m,
+  emacsmode => qr/^#\s*-\*-[^\n]+?-\*-.*$/m,
+);
+
 sub _munge_perl {
     my ($self, $file) = @_;
     my @prepend;
@@ -75,10 +82,14 @@ sub _munge_perl {
 
     # insertion point depends if there's a shebang line
     my $content = $file->content;
-    if ( $content =~ /^#!(?:.*)perl(?:$|\s)/ ) {
+    if ( $content =~ /\A$re{shebang}\n(?:$re{vimmode}|$re{emacsmode})/ ) {
+      # skip two lines
+        $content =~ s/\A([^\n]+\n[^\n]+\n)/$1$prepend\n/;
+    } elsif ( $content =~ /\A(?:$re{shebang}|$re{vimmode}|$re{emacsmode})/ ) {
+      # skip one line
         $content =~ s/\n/\n$prepend\n/;
     } else {
-        $content =~ s/^/$prepend\n/;
+        $content =~ s/\A/$prepend\n/;
     }
     $file->content($content);
 }
@@ -97,7 +108,7 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 1.101590
+version 1.103470
 
 =head1 SYNOPSIS
 
@@ -167,7 +178,7 @@ L<http://cpanratings.perl.org/d/Dist-Zilla-Plugin-Prepender>
 
 =head1 AUTHOR
 
-  Jerome Quelin
+Jerome Quelin
 
 =head1 COPYRIGHT AND LICENSE
 
