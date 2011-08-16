@@ -12,7 +12,7 @@ use warnings;
 
 package Dist::Zilla::Plugin::Prepender;
 BEGIN {
-  $Dist::Zilla::Plugin::Prepender::VERSION = '1.103470';
+  $Dist::Zilla::Plugin::Prepender::VERSION = '1.112280';
 }
 # ABSTRACT: prepend lines at the top of your perl files
 
@@ -25,7 +25,7 @@ with 'Dist::Zilla::Role::FileMunger';
 # -- attributes
 
 # accept some arguments multiple times.
-sub mvp_multivalue_args { qw{ line } }
+sub mvp_multivalue_args { qw{ line skip } }
 
 has copyright => ( ro, default => 1 );
 has _lines => (
@@ -34,12 +34,22 @@ has _lines => (
     init_arg   => 'line',
     default    => sub { [] },
 );
+has _skips => (
+    ro, lazy, auto_deref,
+    isa        => 'ArrayRef[Str]',
+    init_arg   => 'skip',
+    default    => sub { [] },
+);
 
 
 # -- public methods
 
 sub munge_file {
     my ($self, $file) = @_;
+
+    foreach my $skip ( $self->_skips ){
+        return if $file->name =~ $skip;
+    }
 
     return $self->_munge_perl($file) if $file->name    =~ /\.(?:pm|pl)$/i;
     return $self->_munge_perl($file) if $file->content =~ /^#!(?:.*)perl(?:$|\s)/;
@@ -108,7 +118,7 @@ Dist::Zilla::Plugin::Prepender - prepend lines at the top of your perl files
 
 =head1 VERSION
 
-version 1.103470
+version 1.112280
 
 =head1 SYNOPSIS
 
@@ -118,6 +128,8 @@ In your F<dist.ini>:
     copyright = 0
     line = use strict;
     line = use warnings;
+    skip = t/data/.+\.pl
+    skip = something-else-unnecessary
 
 =head1 DESCRIPTION
 
@@ -139,10 +151,12 @@ defaults to true.
 =item * line - anything you want to add. may be specified multiple
 times. no default.
 
+=item * skip - regexp of file names to not prepend to.
+may be specified multiple times. no default.
+
 =back
 
-=for Pod::Coverage multivalue_args
-munge_file
+=for Pod::Coverage mvp_multivalue_args munge_file
 
 =head1 SEE ALSO
 
